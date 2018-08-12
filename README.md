@@ -1,4 +1,4 @@
-[<img src="https://github.com/abhioncbr/apache-pulsar-exploration raw/master/pulsar.png" align="right">](https://pulsar.incubator.apache.org/en/)
+[![logo](pulsar.png)](https://pulsar.incubator.apache.org/en/)
 # apache-pulsar-exploration [repo for exploration code around apache-pulsar]
 This is a repository for exploring [Apache Pulsar](https://pulsar.incubator.apache.org/) ([incubating](https://pulsar.incubator.apache.org/)).
 
