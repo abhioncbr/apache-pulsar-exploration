@@ -12,7 +12,7 @@ libraryDependencies ++= Seq(
   "org.apache.spark" %% "spark-streaming" % versions.sparkVersion % "provided",
   "org.apache.bahir" %% "spark-streaming-twitter" % versions.twitterStreamingVersion
 )
-libraryDependencies += "org.apache.pulsar" % "pulsar-client" % "2.1.0-incubating"
+libraryDependencies += "org.apache.pulsar" % "pulsar-client" % "2.1.0-incubating" withSources()
 
 assemblyMergeStrategy in assembly := {
   case PathList("META-INF", xs @ _*) => MergeStrategy.discard
