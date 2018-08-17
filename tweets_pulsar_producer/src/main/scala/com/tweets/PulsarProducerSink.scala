@@ -5,7 +5,7 @@ import org.apache.pulsar.client.impl.schema.JSONSchema
 import scala.collection.JavaConverters._
 
 // added wrapper class for pulsar producer, so that per producer per executor will publish tweets.
-class PulsarSink[T](createProducer: () => Producer[T] ) extends Serializable {
+class PulsarProducerSink[T](createProducer: () => Producer[T] ) extends Serializable {
   @transient lazy private val producer = createProducer()
 
   def send(value: T): Unit = producer.send(value)
@@ -13,8 +13,8 @@ class PulsarSink[T](createProducer: () => Producer[T] ) extends Serializable {
   def send(value: T, key: String, prop: Map[String,String]): Unit= producer.newMessage.key(key).value(value).properties(prop.asJava).send
 }
 
-object PulsarSink {
-  def apply[T](config: Map[String, Object], clazz: Class[T]): PulsarSink[T] = {
+object PulsarProducerSink {
+  def apply[T](config: Map[String, Object], clazz: Class[T]): PulsarProducerSink[T] = {
     val f = () => {
       val client: PulsarClient = PulsarClient.builder.serviceUrl(config("pulsarUrl").toString).build
       val producer: Producer[T] = client.newProducer(JSONSchema.of(clazz)).topic(config("topic").toString).create
@@ -27,6 +27,6 @@ object PulsarSink {
 
       producer
     }
-    new PulsarSink(f)
+    new PulsarProducerSink(f)
   }
 }

@@ -1,6 +1,6 @@
 package com.tweets.pulsar.producer
 
-import com.tweets.PulsarSink
+import com.tweets.PulsarProducerSink
 import com.tweets.util.Util
 import org.apache.pulsar.client.api.{Producer, PulsarClient}
 import org.apache.spark.broadcast.Broadcast
@@ -36,7 +36,7 @@ class TweetsPulsarProducer(args: Array[String]) {
     //setting up pulsar client & topic producer
     //val producer = new PuslarClientWrapper( args(0), args(1))
     val conf: Map[String, String] = Map("pulsarUrl" -> args(0), "topic" -> args(1))
-    val pulsarSink: Broadcast[PulsarSink[Array[Byte]]] = sparkSession.sparkContext.broadcast(PulsarSink( conf, classOf[Array[Byte]] ))
+    val pulsarSink: Broadcast[PulsarProducerSink[Array[Byte]]] = sparkSession.sparkContext.broadcast(PulsarProducerSink( conf, classOf[Array[Byte]] ))
     publishTweets(streamingContext, pulsarSink, args(2))
 
     // starting tweets publishing to pulsar
@@ -45,7 +45,7 @@ class TweetsPulsarProducer(args: Array[String]) {
     //producer.close()
   }
 
-  def publishTweets(streamingContext: StreamingContext, pulsarSink: Broadcast[PulsarSink[Array[Byte]]], tweetsFilter: String): Unit  = {
+  def publishTweets(streamingContext: StreamingContext, pulsarSink: Broadcast[PulsarProducerSink[Array[Byte]]], tweetsFilter: String): Unit  = {
     val stream = TwitterUtils.createStream(streamingContext, None)
     val filteredTweets = stream.filter(status => status.getText.split(" ")
       .toSet.exists(str => str.contains(tweetsFilter))).map(status => status.getText.replace('\n', ' '))
